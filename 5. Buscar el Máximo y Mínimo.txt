@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+	int matriz[4][4] = {
+		{2, 4, 2, 3}, 
+		{3, 4, 5, 6}, 
+		{6, 7, 8, 9},
+		{3, 7, 5, 1}
+	};
+	setlocale(LC_ALL, "");
+	int n1, n2, m1, m2;	
+	matriz[m1][m2] = matriz[0][0];
+	cout << "Matriz:" << endl;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			cout << matriz[i][j] << " ";
+			if (matriz[i][j] > matriz[m1][m2]){
+				m1 = i;
+				m2 = j;
+			} else if (matriz[i][j] < matriz[m1][m2]) {
+				n1 = i;
+				n2 = j;
+			}
+		}
+			cout << endl;
+	}
+	cout << "El valor máximo es 16 en la posición " << "(" << m1 << "," << m2 <<") " << endl;
+	cout << "El valor mínimo es 16 en la posición " << "(" << n1 << "," << n2 <<") " << endl;
+	return 0;
+}
