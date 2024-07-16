@@ -1,0 +1,54 @@
+#include <iostream>  
+#include <cstdlib>  
+#include <ctime>  
+using namespace std;
+void inicializarTablero(int tablero[10][10]) {
+    // Inicializar la semilla para generación de números aleatorios  
+    srand(time(0));
+    // Llenar el tablero con minas (1) o celdas vacías (0) de forma aleatoria  
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            tablero[i][j] = rand() % 2;
+        }
+    }
+}
+
+int contarMinasAdyacentes(int tablero[10][10], int fila, int columna) {
+    int minas = 0;
+    // Calcular el número de minas en las celdas adyacentes  
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == 0 && j == 0) {
+                continue; // Ignorar la propia celda  
+            }
+            int nuevaFila = fila + i;
+            int nuevaColumna = columna + j;
+            if (nuevaFila >= 0 && nuevaFila < 10 && nuevaColumna >= 0 && nuevaColumna < 10) {
+                minas += tablero[nuevaFila][nuevaColumna];  
+            }
+        }
+    }
+    return minas;  
+}  
+
+void mostrarTablero(int tablero[10][10]) {  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            cout << tablero[i][j] << " ";  
+        }  
+        cout << "   ";  
+        for (int j = 0; j < 10; j++) {  
+            cout << contarMinasAdyacentes(tablero, i, j) << " ";  
+        }  
+        cout << endl;  
+    }  
+}  
+
+int main() {
+	setlocale(LC_ALL, "");
+    int tablero[10][10];  
+    inicializarTablero(tablero);  
+    cout << "Tablero original (0: vacío, 1: mina):" << endl;  
+    mostrarTablero(tablero);  
+    return 0;  
+}
