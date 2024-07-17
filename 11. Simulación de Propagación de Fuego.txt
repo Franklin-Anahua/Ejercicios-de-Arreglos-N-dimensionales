@@ -1,0 +1,89 @@
+#include <iostream>  
+#include <cstdlib>
+#include <windows.h>
+#include <ctime>
+#define color SetConsoleTextAttribute
+using namespace std;
+void inicializarBosque(int bosque[10][10]) {  
+    // Inicializar la semilla para generación de números aleatorios  
+    srand(time(0));  
+    // Llenar el bosque con árboles vivos (0) o quemados (2) de forma aleatoria  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            bosque[i][j] = rand() % 2; // 50% de probabilidad de estar vivo (0) o quemado (2)  
+        }  
+    }  
+}  
+
+void mostrarBosque(int bosque[10][10]) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {
+        	if (bosque[i][j]==1) {
+				color(hConsole,4);
+				cout << bosque[i][j] << " ";
+			}else {
+				color(hConsole,15);
+				cout << bosque[i][j] << " ";
+			}
+            cout << bosque[i][j] << " "; 
+        }  
+        cout << endl;  
+    }  
+}  
+
+void propagarFuego(int bosque[10][10]) {  
+   int bosqueTemp[10][10];  
+
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            int vecinosQuemandose = 0;  
+
+            for (int x = -1; x <= 1; x++) {  
+                for (int y = -1; y <= 1; y++) {  
+                    if (x == 0 && y == 0) {  
+                        continue; // Ignorar la propia celda  
+                    }  
+
+                    int nuevaFila = i + x;  
+                    int nuevaColumna = j + y;  
+
+                    if (nuevaFila >= 0 && nuevaFila < 10 && nuevaColumna >= 0 && nuevaColumna < 10) {  
+                        if (bosque[nuevaFila][nuevaColumna] == 1) {  
+                            vecinosQuemandose++;  
+                        }  
+                    }  
+                }  
+            }  
+
+            if (bosque[i][j] == 0 && vecinosQuemandose > 0) {  
+                bosqueTemp[i][j] = 1;  
+            } else if (bosque[i][j] == 1) {  
+                bosqueTemp[i][j] = 2;  
+            } else {  
+                bosqueTemp[i][j] = bosque[i][j];  
+            }  
+        }  
+    }
+    // Copiar el bosque temporal al bosque original  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            bosque[i][j] = bosqueTemp[i][j];  
+        }  
+    }  
+}  
+
+int main() {
+	
+	setlocale(LC_ALL, ""); 
+    int bosque[10][10];  
+    inicializarBosque(bosque);  
+    cout << "Bosque en su estado inicial:" << endl;  
+    mostrarBosque(bosque);
+ 
+    propagarFuego(bosque);  
+    cout << "Bosque después de la propagación del fuego:" << endl;  
+    mostrarBosque(bosque);  
+
+    return 0;  
+}
