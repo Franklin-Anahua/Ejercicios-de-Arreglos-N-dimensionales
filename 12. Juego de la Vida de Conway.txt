@@ -1,0 +1,75 @@
+#include <iostream>  
+#include <cstdlib>  
+#include <ctime>  
+using namespace std;
+
+void inicializarTablero(int tablero[10][10]) {  
+    // Inicializar la semilla para generación de números aleatorios  
+    srand(time(0));  
+    // Llenar el tablero con células vivas (1) o muertas (0) de forma aleatoria  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            tablero[i][j] = rand() % 2; // 50% de probabilidad de estar viva (1) o muerta (0)  
+        }  
+    }  
+}  
+
+void mostrarTablero(int tablero[10][10]) {  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            cout << tablero[i][j] << " ";  
+        }  
+        cout << endl;  
+    }  
+}  
+
+int contarVecinosVivos(int tablero[10][10], int fila, int columna) {  
+    int vecinosVivos = 0;  
+    for (int i = -1; i <= 1; i++) {  
+        for (int j = -1; j <= 1; j++) {  
+            if (i == 0 && j == 0) {  
+                continue; // Ignorar la propia celda  
+            }
+            int nuevaFila = fila + i;  
+            int nuevaColumna = columna + j;  
+            if (nuevaFila >= 0 && nuevaFila < 10 && nuevaColumna >= 0 && nuevaColumna < 10) {  
+                vecinosVivos += tablero[nuevaFila][nuevaColumna];  
+            }  
+        }  
+    }  
+    return vecinosVivos;  
+}  
+
+void calcularSiguienteGeneracion(int tablero[10][10], int tableroSiguiente[10][10]) {  
+    for (int i = 0; i < 10; i++) {  
+        for (int j = 0; j < 10; j++) {  
+            int vecinosVivos = contarVecinosVivos(tablero, i, j);  
+            if (tablero[i][j] == 1) {  
+                if (vecinosVivos < 2 || vecinosVivos > 3) {  
+                    tableroSiguiente[i][j] = 0;  
+                } else {  
+                    tableroSiguiente[i][j] = 1;  
+                }  
+            } else {  
+                if (vecinosVivos == 3) {  
+                    tableroSiguiente[i][j] = 1;  
+                } else {  
+                    tableroSiguiente[i][j] = 0;  
+                }  
+            }  
+        }  
+    }  
+}  
+
+int main() {
+	setlocale(LC_ALL, ""); 
+    int tableroInicial[10][10];
+    int tableroSiguiente[10][10];
+    inicializarTablero(tableroInicial);
+    cout << "Tablero Inicial:" << endl;
+    mostrarTablero(tableroInicial);
+    calcularSiguienteGeneracion(tableroInicial, tableroSiguiente);
+    cout << "\nTablero Segunda Generación:" << endl;
+    mostrarTablero(tableroSiguiente);
+    return 0;  
+}
